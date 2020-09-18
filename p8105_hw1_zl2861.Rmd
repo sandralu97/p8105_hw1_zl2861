@@ -1,82 +1,82 @@
 ---
-title: "github_document"
+title: "Homework 1"
 author: Sandra Lu
 date: September 2020
 output: 
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: hide
+  github_document
 ---
 
-Homework 1
 
 # Problem 1
 
-A random sample of size 10 from a standard normal distribution
-```{r}
-sample_1 = rnorm(10)
-sample_1
-```
-
+**Dataframe with specific requirement**
 
 ```{r}
-samp = rnorm(100)
-length(samp)
-```
-
-# Section 2
-
-I can take the mean of the sample, too!
-The mean is `r mean(samp)`.
-
-# Section 3
-## Data frame and plot
-
-Below chunk creates a data frame and generate a plot
-code_chunk = alt+ctrl+i
-eval = FALSE -> do not execute code
-echo = False -> do not show code, only results
-message = FALSE --> only output, turn off code chunk & messages
-include = FALSE -> everything off
-collapse = TRUE -> show everything in one chunk
-```{r plot_example, message=FALSE}
 library(tidyverse)
-
-plot_df = tibble(
-  x = rnorm(500,mean = 2,sd=4),
-  y = 3-4.2*x + rnorm(500)
+answer_1 = tibble(
+  sample_1 = rnorm(10),
+  length_1 = sample_1>0,
+  vec_char = c("Hello","This","Is","p8105","Data","Science","to","Learn","R","Studio"),
+  vec_factor = factor(c("low","medium","high","low","medium","high","low","medium","high","high"))
 )
-
-ggplot(plot_df, aes(x = x, y = y)) + geom_point()
 ```
 
-The data frame has `r nrow(plot_df)` rows.
+**Mean of the dataframe**
+```{r}
+mean(pull(answer_1, sample_1))
+mean(pull(answer_1, length_1))
+mean(pull(answer_1, vec_char))
+mean(pull(answer_1, vec_factor))
+```
 
-Here is a list
---------------
-* List 1
-* List 2
-  *List 2.1
-* List 4
 
-Lists
-------------------------------------------------------------
+**Convert logical, character, and factor variables to numeric variables**
 
-*   Bulleted list item 1
+```{r eval=FALSE}
+as.numeric(pull(answer_1,length_1)
 
-*   Item 2
+as.numeric(pull(answer_1,vec_char)
+           
+as.numeric(pull(answer_1,vec_factor)
 
-    * Item 2a
+```
 
-    * Item 2b
+When converting logical variable to numeric variable, TRUE was converted to 1 while FALSE was converted to 0. It represented the binary nature as we usually code false/true.
 
-1.  Numbered list item 1
+Character variables cannot be converted to numeric variable. The results were NA because R cannot recognize the meaning of characters.
 
-1.  Item 2. The numbers are incremented automatically in the output.
+When converting factor variable to numeric variable, each level was assigned a number starting from 1. It reflected the categorical meaning of factor variables.
 
-#### Table
-First Header  | Second Header
-------------- | -------------
-Content Cell  | Content Cell
-Content Cell  | Content Cell
+**More conversion**
+```{r}
+as.numeric(pull(answer_1,length_1))*pull(answer_1,sample_1)
+
+as.factor(pull(answer_1,length_1))*pull(answer_1,sample_1)
+
+as.numeric(as.factor(pull(answer_1,length_1)))*pull(answer_1,sample_1)
+
+```
+
+
+# Problem 2
+
+```{r}
+data("penguins", package = "palmerpenguins")
+```
+
+**Here is some description of the 'penguins' data set**
+
+A description of all the variables in penguins datasets is as follow 
+
+`r summary(penguins)`.
+
+The size of the dataset is `r nrow(penguins)*ncol(penguins)`.
+
+The mean value of flipper length is `r mean(pull(penguins,flipper_length_mm),na.rm = TRUE)`
+
+
+**Here is the scatterplot:**
+
+```{r}
+ggplot(penguins, aes(x= bill_length_mm, y = flipper_length_mm,color = species)) + geom_point()
+```
